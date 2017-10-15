@@ -11,9 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Brings the application down and frees all Google Cloud Platform resources.
+# Removes the DNS entry for the application
 
-machine_name = node.default['instance-name']
+machine_name = if node.default.key?('instance-name')
+                 # Use a fixed instance name specified via attributes
+                 node.default['instance-name']
+               else
+                 "webinar-#{Time.now.strftime('%Y%m%d')}"
+               end
 puts "Instance name: #{machine_name}"
 
 gauth_credential 'mycred' do
@@ -23,32 +28,6 @@ gauth_credential 'mycred' do
     'https://www.googleapis.com/auth/compute',
     'https://www.googleapis.com/auth/ndev.clouddns.readwrite'
   ]
-end
-
-gcompute_zone 'us-west1-a' do
-  action :create
-  project 'graphite-demo-chef-webinar1'
-  credential 'mycred'
-end
-
-gcompute_region 'us-west1' do
-  action :create
-  project 'graphite-demo-chef-webinar1'
-  credential 'mycred'
-end
-
-gcompute_instance machine_name do
-  action :delete
-  zone 'us-west1-a'
-  project 'graphite-demo-chef-webinar1'
-  credential 'mycred'
-end
-
-gcompute_address "#{machine_name}-ip" do
-  action :delete
-  region 'us-west1'
-  project 'graphite-demo-chef-webinar1'
-  credential 'mycred'
 end
 
 gdns_managed_zone 'app-chef-webinar1' do
