@@ -26,21 +26,12 @@ gauth_credential 'mycred' do
   action :serviceaccount
   path '/home/nelsona/my_account.json'
   scopes [
-    'https://www.googleapis.com/auth/compute',
-    'https://www.googleapis.com/auth/ndev.clouddns.readwrite'
+    'https://www.googleapis.com/auth/compute'
   ]
 end
 
 gcompute_zone 'us-west1-a' do
   action :create
-  project 'graphite-demo-chef-webinar1'
-  credential 'mycred'
-end
-
-gcompute_disk "#{machine_name}-os-1" do
-  action :create
-  source_image gcompute_image_family('centos-7', 'centos-cloud')
-  zone 'us-west1-a'
   project 'graphite-demo-chef-webinar1'
   credential 'mycred'
 end
@@ -77,8 +68,12 @@ gcompute_instance machine_name do
   disks [
     {
       boot: true,
+      # Auto delete will prevent disks from being left behind on deletion.
       auto_delete: true,
-      source: "#{machine_name}-os-1"
+      initialize_params: {
+        disk_size_gb: 50,
+        source_image: gcompute_image_family('centos-7', 'centos-cloud')
+      }
     }
   ]
   network_interfaces [
@@ -96,43 +91,31 @@ gcompute_instance machine_name do
   service_accounts [
     {
       scopes: [
+        # Enable Cloud Storage so we can access the bootstrap.sh startup script
+        # and related files.
         'https://www.googleapis.com/auth/devstorage.read_only'
       ]
     }
   ]
-  metadata ({
-    items: [
-      {
-        key: 'startup-script-url',
-        value: 'gs://chef-webinar1/bootstrap.sh'
-      },
-      {
-        key: 'chef-server',
-        value: 'chef-demo.graphite.cloudnativeapp.com'
-      },
-      {
-        key: 'org-name',
-        value: 'google'
-      },
-      {
-        key: 'chef-server-crt',
-        value: 'gs://chef-webinar1/server.crt'
-      },
-      {
-        key: 'validator-key',
-        value: 'gs://chef-webinar1/google-validator.pem'
-      },
-      {
-        key: 'runlist',
-        value: '["recipe[myapp]"]'
-      }
-    ]
-  })
-  tags ({
-    items: [
-      'http-server'
-    ]
-  })
+  metadata ({ items: [
+    # The recipes/roles to apply to the newly created machine
+    { key: 'runlist', value: '["recipe[myapp]"]' },
+    # The bootstrap script that will connect the machine and Chef Server
+    { key: 'startup-script-url', value: 'gs://chef-webinar1/bootstrap.sh' },
+    # The base URL to the Chef Server
+    { key: 'chef-server', value: 'chef-demo.graphite.cloudnativeapp.com' },
+    # The organization name that this machine will belong to
+    { key: 'org-name', value: 'google' },
+    # The Chef Server certificate (for self-signed servers)
+    { key: 'chef-server-crt', value: 'gs://chef-webinar1/server.crt' },
+    # The validation key to be used to register the machine with Chef Server
+    { key: 'validator-key', value: 'gs://chef-webinar1/google-validator.pem' }
+  ]})
+  tags ({ items: [
+    # Default firewall rule only allows HTTP access to machines with
+    # http-server tag attached to them.
+    'http-server'
+  ]})
   zone 'us-west1-a'
   project 'graphite-demo-chef-webinar1'
   credential 'mycred'
