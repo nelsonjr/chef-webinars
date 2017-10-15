@@ -53,6 +53,10 @@ The resources below are managed by the [webinar1-infra::up_app_dns][recipe_up_ap
 
 1. `gdns_managed_zone` allocates the DNS zone for the domain
 
+## Running Your Own Webinar
+
+TODO(nelsonjr): Explain what needs to change in the recipes so it can run on a customer's environment.
+
 ## Security Considerations
 
 See details @ [Security Considerations][security] page.
