@@ -57,6 +57,12 @@ The resources below are managed by the [webinar1-infra::up_app_dns][recipe_up_ap
 
 TODO(nelsonjr): Explain what needs to change in the recipes so it can run on a customer's environment.
 
+1. Change project name
+2. Change service account
+3. Copy bootstrap to your own bucket
+4. Copy the `<org>-validator.pem` to your own bucket
+5. (optional) Copy the `server.crt` to your own bucket
+
 ## Security Considerations
 
 See details @ [Security Considerations][security] page.
