@@ -6,6 +6,17 @@ metadata() {
   curl -H Metadata-Flavor:Google "${metadata_ep}/instance/attributes/${attr}"
 }
 
+cat <<EOF
+
+   ________         ____   _       __     __    _                     ____
+  / ____/ /_  ___  / __/  | |     / /__  / /_  (_)___  ____ ______   /  _/
+ / /   / __ \\/ _ \\/ /_    | | /| / / _ \\/ __ \\/ / __ \\/ __ \`/ ___/   / /
+/ /___/ / / /  __/ __/    | |/ |/ /  __/ /_/ / / / / / /_/ / /     _/ /
+\\____/_/ /_/\\___/_/       |__/|__/\\___/_.___/_/_/ /_/\\__,_/_/     /___/
+
+------------------------------------------------------------------------
+EOF
+
 declare -r chef_server=$(metadata chef-server)
 declare -r org_name=$(metadata org-name)
 declare -r chef_server_url="https://${chef_server}/organizations/${org_name}"
@@ -15,16 +26,18 @@ declare -r start_run_list=$(metadata runlist)
 declare -r local_validator='/etc/chef/validation.pem'
 declare -r startup_json='/etc/chef/startup.json'
 
-echo '------------------------------------------------------------------------'
-echo "chef server     : $chef_server"
-echo "org name        : $org_name"
-echo "chef server url : $chef_server_url"
-echo "chef server crt : $chef_server_crt"
-echo "validator       : $validator"
-echo "start run list  : $start_run_list"
-echo "local validator : $local_validator"
-echo "startup json    : $startup_json"
-echo '------------------------------------------------------------------------'
+cat <<EOF
+------------------------------------------------------------------------
+chef server     : $chef_server
+org name        : $org_name
+chef server url : $chef_server_url
+chef server crt : $chef_server_crt
+validator       : $validator
+start run list  : $start_run_list
+local validator : $local_validator
+startup json    : $startup_json
+------------------------------------------------------------------------
+EOF
 
 declare -r start_time=$(date +%s)
 logger -t bootstrapper 'Starting bootstrap'
