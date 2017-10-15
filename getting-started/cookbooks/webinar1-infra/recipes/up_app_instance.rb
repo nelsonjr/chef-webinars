@@ -101,7 +101,7 @@ gcompute_instance machine_name do
   ]
   metadata ({ items: [
     # The recipes/roles to apply to the newly created machine
-    { key: 'runlist', value: '["recipe[myapp]"]' },
+    { key: 'runlist', value: 'recipe[webinar1-myapp]' },
     # The bootstrap script that will connect the machine and Chef Server
     { key: 'startup-script-url', value: 'gs://chef-webinar1/bootstrap.sh' },
     # The base URL to the Chef Server

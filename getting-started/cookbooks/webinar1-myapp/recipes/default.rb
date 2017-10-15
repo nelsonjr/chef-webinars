@@ -30,7 +30,7 @@ web_app 'myapp' do
   server_name node['hostname']
   server_aliases [node['fqdn'], "my-site.example.com"]
   docroot '/opt/myapp'
-  cookbook 'myapp'
+  cookbook 'webinar1-myapp'
 end
 
 directory '/opt/myapp' do
