@@ -14,7 +14,9 @@
 # Configures a blank Google Cloud Platform project to deploy the sample
 # application.
 
-machine_name = "gannett-#{Time.now.strftime('%s')}"
+::Chef::Resource.send(:include, Google::Functions)
+
+machine_name = "webinar-#{Time.now.strftime('%s')}"
 
 gauth_credential 'mycred' do
   action :serviceaccount
@@ -32,7 +34,7 @@ end
 
 gcompute_disk "#{machine_name}-os-1" do
   action :create
-  source_image 'projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts'
+  source_image gcompute_image_family('centos-7', 'centos-cloud')
   zone 'us-west1-a'
   project 'graphite-demo-chef-webinar1'
   credential 'mycred'
@@ -93,6 +95,34 @@ gcompute_instance "#{machine_name}" do
       ]
     }
   ]
+  metadata ({
+    items: [
+      {
+        key: 'startup-script-url',
+        value: 'gs://chef-webinar1/bootstrap.sh'
+      },
+      {
+        key: 'chef-server',
+        value: 'chef-demo.graphite.cloudnativeapp.com'
+      },
+      {
+        key: 'org-name',
+        value: 'google'
+      },
+      {
+        key: 'chef-server-crt',
+        value: 'gs://chef-webinar1/server.crt'
+      },
+      {
+        key: 'validator-key',
+        value: 'gs://chef-webinar1/google-validator.pem'
+      },
+      {
+        key: 'runlist',
+        value: '["recipe[myapp]"]'
+      }
+    ]
+  })
   tags ({
     items: [
       'http-server'
