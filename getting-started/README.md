@@ -52,9 +52,14 @@ The resources below are managed by the [webinar1-infra::up_app_instance][recipe_
 The resources below are managed by the [webinar1-infra::up_app_dns][recipe_up_app_dns] recipe:
 
 1. `gdns_managed_zone` allocates the DNS zone for the domain
+
+## Security Considerations
+
+See details @ [Security Considerations][security] page.
 2. `gdns_resource_record_set` allocated the DNS record (www.chef-webinar1.graphite.cloudnativeapp.com) to
    resolve the application dynamic address
 
 
 [recipe_up_app_instance]: cookbooks/webinar1-infra/recipes/up_app_instance.rb
 [recipe_up_app_dns]: cookbooks/webinar1-infra/recipes/up_app_dns.rb
+[security]: security.md
