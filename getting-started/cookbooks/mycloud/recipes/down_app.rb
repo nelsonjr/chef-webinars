@@ -11,20 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Configures a blank Google Cloud Platform project to deploy the sample
-# application.
+# Brings the application down and frees all Google Cloud Platform resources.
 
-#auth_cookbook = File.expand_path('../../google-gauth/libraries', __dir__)
-#$LOAD_PATH.unshift auth_cookbook unless $LOAD_PATH.include?(auth_cookbook)
-#require 'google/functions/gauth_credential_serviceaccount_for_function'
-
-::Chef::Resource.send(:include, Google::Functions)
-
-puts '#### >>> DEBUG MAKE IT DYNAMIC <<< ####'
-#machine_name = "webinar-#{Time.now.strftime('%s')}"
-machine_name = "webinar-#{Time.now.strftime('%Y%m%d')}"
-
-# TODO(nelsonjr): Document this file
+machine_name = node.default['instance-name']
+puts "Instance name: #{machine_name}"
 
 gauth_credential 'mycred' do
   action :serviceaccount
@@ -35,6 +25,32 @@ gauth_credential 'mycred' do
   ]
 end
 
+gcompute_zone 'us-west1-a' do
+  action :create
+  project 'graphite-demo-chef-webinar1'
+  credential 'mycred'
+end
+
+gcompute_region 'us-west1' do
+  action :create
+  project 'graphite-demo-chef-webinar1'
+  credential 'mycred'
+end
+
+gcompute_instance machine_name do
+  action :delete
+  zone 'us-west1-a'
+  project 'graphite-demo-chef-webinar1'
+  credential 'mycred'
+end
+
+gcompute_address "#{machine_name}-ip" do
+  action :delete
+  region 'us-west1'
+  project 'graphite-demo-chef-webinar1'
+  credential 'mycred'
+end
+
 gdns_managed_zone 'app-chef-webinar1' do
   action :create
   dns_name 'chef-webinar1.graphite.cloudnativeapp.com.'
@@ -42,21 +58,10 @@ gdns_managed_zone 'app-chef-webinar1' do
   credential 'mycred'
 end
 
-cred = ::Google::Functions.gauth_credential_serviceaccount_for_function(
-         '/home/nelsona/my_account.json',
-         ['https://www.googleapis.com/auth/compute']
-       )
-
 gdns_resource_record_set 'www.chef-webinar1.graphite.cloudnativeapp.com.' do
-  action :create
+  action :delete
   managed_zone 'app-chef-webinar1'
   type 'A'
-  ttl 5
-  target [
-    gcompute_address_ip(
-      "#{machine_name}-ip", 'us-west1', 'graphite-demo-chef-webinar1', cred
-    )
-  ]
   project 'graphite-demo-chef-webinar1'
   credential 'mycred'
 end

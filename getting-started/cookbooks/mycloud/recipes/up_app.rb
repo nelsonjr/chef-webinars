@@ -16,17 +16,15 @@
 
 ::Chef::Resource.send(:include, Google::Functions)
 
-puts '#### >>> DEBUG MAKE IT DYNAMIC <<< ####'
-#machine_name = "webinar-#{Time.now.strftime('%s')}"
-machine_name = "webinar-#{Time.now.strftime('%Y%m%d')}"
-
-# TODO(nelsonjr): Document this file
+machine_name = node.default['instance-name']
+puts "Instance name: #{machine_name}"
 
 gauth_credential 'mycred' do
   action :serviceaccount
   path '/home/nelsona/my_account.json'
   scopes [
-    'https://www.googleapis.com/auth/compute'
+    'https://www.googleapis.com/auth/compute',
+    'https://www.googleapis.com/auth/ndev.clouddns.readwrite'
   ]
 end
 
@@ -117,6 +115,32 @@ gcompute_instance machine_name do
     'http-server'
   ]})
   zone 'us-west1-a'
+  project 'graphite-demo-chef-webinar1'
+  credential 'mycred'
+end
+
+gdns_managed_zone 'app-chef-webinar1' do
+  action :create
+  dns_name 'chef-webinar1.graphite.cloudnativeapp.com.'
+  project 'graphite-demo-chef-webinar1'
+  credential 'mycred'
+end
+
+cred = ::Google::Functions.gauth_credential_serviceaccount_for_function(
+         '/home/nelsona/my_account.json',
+         ['https://www.googleapis.com/auth/compute']
+       )
+
+gdns_resource_record_set 'www.chef-webinar1.graphite.cloudnativeapp.com.' do
+  action :create
+  managed_zone 'app-chef-webinar1'
+  type 'A'
+  ttl 5
+  target [
+    gcompute_address_ip(
+      "#{machine_name}-ip", 'us-west1', 'graphite-demo-chef-webinar1', cred
+    )
+  ]
   project 'graphite-demo-chef-webinar1'
   credential 'mycred'
 end
