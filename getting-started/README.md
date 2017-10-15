@@ -1,8 +1,5 @@
 # Getting Started
 
-
-## Application Diagram
-
 ![Application](architecture.png)
 
 
