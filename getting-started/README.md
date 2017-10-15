@@ -29,3 +29,30 @@ There are 2 cookbooks used in this Webinar:
 - `webinar1-infra` setups the cloud infrastructure, to be run from the admin workstation
 
       chef-client -z --runlist 'recipe["webinar1-infra::myapp"]'
+
+## Workflow
+
+To deploy our new application on a clean environment we'll require a few Google Cloud Platform resources to be allocated. Given that all resources are dynamically allocated we cannot know in advance their values (i.e. the static IP address to be allocated by Google). Therefore we'll run our deployment in 2 phases:
+
+1. Create the infrastructure to host the application
+2. Register the application with its DNS so it can be accessed by a domain URL
+
+### Creating the host application
+
+The resources below are managed by the [webinar1-infra::up_app_instance][recipe_up_app_instance] recipe:
+
+1. `gcompute_address` allocated a public facing static IP address for the application server
+2. `gcompute_instance` creates a CentOS 7 virtual machine
+3. `gcompute_firewall` manages the GCP firewall, allowing inbound connections to port :80
+
+### Registering with the DNS
+
+The resources below are managed by the [webinar1-infra::up_app_dns][recipe_up_app_dns] recipe:
+
+1. `gdns_managed_zone` allocates the DNS zone for the domain
+2. `gdns_resource_record_set` allocated the DNS record (www.chef-webinar1.graphite.cloudnativeapp.com) to
+   resolve the application dynamic address
+
+
+[recipe_up_app_instance]: cookbooks/webinar1-infra/recipes/up_app_instance.rb
+[recipe_up_app_dns]: cookbooks/webinar1-infra/recipes/up_app_dns.rb
