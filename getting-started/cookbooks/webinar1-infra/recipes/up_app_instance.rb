@@ -108,7 +108,8 @@ gcompute_instance machine_name do
     { key: 'chef-server', value: 'chef-demo.graphite.cloudnativeapp.com' },
     # The organization name that this machine will belong to
     { key: 'org-name', value: 'google' },
-    # The Chef Server certificate (for self-signed servers)
+    # An optional Chef Server certificate (useful for servers with self-signed
+    # or untrusted ceritificates). For more information see SECURITY.md page.
     { key: 'chef-server-crt', value: 'gs://chef-webinar1/server.crt' },
     # The validation key to be used to register the machine with Chef Server
     { key: 'validator-key', value: 'gs://chef-webinar1/google-validator.pem' }

@@ -65,7 +65,7 @@ gsutil cp "${chef_server_crt}" "/etc/chef/trusted_certs/server.crt"
 
 echo '===== Setting first run ====='
 cat >"${startup_json}" <<EOF
-{"run_list": ${start_run_list}}
+{"run_list": "${start_run_list}"}
 EOF
 
 echo '===== Converging Chef ====='
