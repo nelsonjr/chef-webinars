@@ -1,0 +1,31 @@
+---
+driver:
+  name: vagrant
+  network:
+    - ["forwarded_port", {guest: 80, host: 8080}]
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centos-7.2
+
+verifier:
+  name: inspec
+  format: doc
+
+suites:
+  - name: default
+    run_list:
+      - recipe[webinar1-myapp::default]
+    attributes:
+      gce:
+        instance:
+          attributes:
+            startup-script-url: "https://storage.googleapis.com/jj-test-kitchen/bootstrap.sh"
+        cpuPlatform: "Intel Broadwell"
+        hostname: "machine-1.c.jj-test-kitchen.internal"
+        image: "projects/ubuntu-os-cloud/global/images/ubuntu-1604-xenial-v20171011"
+        networkInterfaces:
+          accessConfigs:
+            externalIp: "35.197.121.139"

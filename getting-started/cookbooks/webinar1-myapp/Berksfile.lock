@@ -1,0 +1,9 @@
+DEPENDENCIES
+  webinar1-myapp
+    path: .
+    metadata: true
+
+GRAPH
+  apache2 (5.0.1)
+  webinar1-myapp (0.1.0)
+    apache2 (>= 0.0.0)

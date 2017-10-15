@@ -40,10 +40,9 @@ directory '/opt/myapp' do
   action :create
 end
 
-cookbook_file '/opt/myapp/index.php' do
-  source 'myapp/v1/index.php'
-  owner 'root'
-  group 'root'
-  mode '0644'
-  action :create
+template "/opt/myapp/index.php" do
+  source "index.php.erb"
+  owner "root"
+  group "root"
+  mode "0644"
 end
