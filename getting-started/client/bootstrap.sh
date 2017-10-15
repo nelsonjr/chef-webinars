@@ -1,13 +1,33 @@
 #!/bin/bash
 
-declare -r chef_server='chef-server.c.graphite-demo-chef-webinar1.internal'
-declare -r org_name='google'
+metadata() {
+  local -r attr=$1
+  local -r metadata_ep='http://metadata/computeMetadata/v1beta1/'
+  curl -H Metadata-Flavor:Google "${metadata_ep}/instance/attributes/${attr}"
+}
+
+declare -r chef_server=$(metadata chef-server)
+declare -r org_name=$(metadata org-name)
 declare -r chef_server_url="https://${chef_server}/organizations/${org_name}"
-declare -r chef_server_crt='gs://chef-webinar1/server.crt'
-declare -r validator='gs://chef-webinar1/google-validator.pem'
-declare -r start_run_list='["role[webserver]"]'
+declare -r chef_server_crt=$(metadata chef-server-crt)
+declare -r validator=$(metadata validator-key)
+declare -r start_run_list=$(metadata runlist)
 declare -r local_validator='/etc/chef/validation.pem'
 declare -r startup_json='/etc/chef/startup.json'
+
+echo '------------------------------------------------------------------------'
+echo "chef server     : $chef_server"
+echo "org name        : $org_name"
+echo "chef server url : $chef_server_url"
+echo "chef server crt : $chef_server_crt"
+echo "validator       : $validator"
+echo "start run list  : $start_run_list"
+echo "local validator : $local_validator"
+echo "startup json    : $startup_json"
+echo '------------------------------------------------------------------------'
+
+declare -r start_time=$(date +%s)
+logger -t bootstrapper 'Starting bootstrap'
 
 if [[ -e '/usr/bin/chef-client' ]]; then
   echo '===== Chef already installed. Skipping installation. ====='
