@@ -6,6 +6,8 @@ description 'Installs/Configures Google Compute Engine infrastructure'
 long_description 'Installs/Configures Google Compute Engine infrastructure'
 version '0.1.0'
 chef_version '>= 12.1' if respond_to?(:chef_version)
+depends 'google-gauth'
 depends 'google-gcompute'
+depends 'google-gdns'
 issues_url 'https://github.com/nelsonjr/chef-webinars/issues'
 source_url 'https://github.com/nelsonjr/chef-webinars'

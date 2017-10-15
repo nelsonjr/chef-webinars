@@ -16,13 +16,18 @@
 
 ::Chef::Resource.send(:include, Google::Functions)
 
-machine_name = "webinar-#{Time.now.strftime('%s')}"
+puts '#### >>> DEBUG MAKE IT DYNAMIC <<< ####'
+#machine_name = "webinar-#{Time.now.strftime('%s')}"
+machine_name = "webinar-#{Time.now.strftime('%Y%m%d')}"
+
+# TODO(nelsonjr): Document this file
 
 gauth_credential 'mycred' do
   action :serviceaccount
   path '/home/nelsona/my_account.json'
   scopes [
-    'https://www.googleapis.com/auth/compute'
+    'https://www.googleapis.com/auth/compute',
+    'https://www.googleapis.com/auth/ndev.clouddns.readwrite'
   ]
 end
 
@@ -66,7 +71,7 @@ gcompute_machine_type 'n1-standard-1' do
   credential 'mycred'
 end
 
-gcompute_instance "#{machine_name}" do
+gcompute_instance machine_name do
   action :create
   machine_type 'n1-standard-1'
   disks [
