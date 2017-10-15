@@ -1,6 +1,8 @@
 # Getting Started
 
-TODO(nelsonjr): Add documentation here
+## Application Diagram
+
+![Application](architecture.png)
 
 ## Installation
 
@@ -27,7 +29,3 @@ There are 2 cookbooks used in this Webinar:
 - `webinar1-infra` setups the cloud infrastructure, to be run from the admin workstation
 
       chef-client -z --runlist 'recipe["webinar1-infra::myapp"]'
-
-## Application Diagram
-
-![Application](architecture.png)
