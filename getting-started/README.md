@@ -1,8 +1,7 @@
 # Getting Started
 
-## Application Diagram
-
 ![Application](architecture.png)
+
 
 ## Installation
 
@@ -19,16 +18,13 @@
 
 There are 2 cookbooks used in this Webinar:
 
-    knife supermarket install webinar1-myapp
-    knife supermarket install webinar1-infra
-
 - `webinar1-myapp` setups the application, to be uploaded to your Chef server:
-
-      knife cookbook upload webinar1-myapp
-
 - `webinar1-infra` setups the cloud infrastructure, to be run from the admin workstation
 
-      chef-client -z --runlist 'recipe["webinar1-infra::myapp"]'
+To install the cookbooks run:
+
+    knife supermaket install webinar1-infra
+
 
 ## Workflow
 
@@ -52,6 +48,22 @@ The resources below are managed by the [webinar1-infra::up_app_instance][recipe_
 The resources below are managed by the [webinar1-infra::up_app_dns][recipe_up_app_dns] recipe:
 
 1. `gdns_managed_zone` allocates the DNS zone for the domain
+
+
+## Running Your Own Webinar
+
+TODO(nelsonjr): Explain what needs to change in the recipes so it can run on a customer's environment.
+
+1. Change project name
+2. Change service account
+3. Copy bootstrap to your own bucket
+4. Copy the `<org>-validator.pem` to your own bucket
+5. (optional) Copy the `server.crt` to your own bucket
+
+### Converging the recipes
+
+TODO(nelsonjr): Put the chef-client commands here.
+
 
 ## Security Considerations
 
