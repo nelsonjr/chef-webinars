@@ -30,4 +30,4 @@ There are 2 cookbooks used in this Webinar:
 
 ## Application Diagram
 
-![Application][architecture.png]
+![Application](architecture.png)
