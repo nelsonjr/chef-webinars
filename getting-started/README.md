@@ -41,7 +41,9 @@ To deploy our new application on a clean environment we'll require a few Google 
 
 The resources below are managed by the [webinar1-infra::up_app_instance][recipe_up_app_instance] recipe:
 
-1. `gcompute_address` allocated a public facing static IP address for the application server
+1. `gcompute_address` allocated a public facing static IP address for the application server.
+   This will ensure that the address associates with the machine will remain fixed and never go out
+   of sync with the DNS records.
 2. `gcompute_instance` creates a CentOS 7 virtual machine
 3. `gcompute_firewall` manages the GCP firewall, allowing inbound connections to port :80
 
