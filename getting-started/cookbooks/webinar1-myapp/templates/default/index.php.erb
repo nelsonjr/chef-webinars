@@ -1,37 +1,38 @@
+<?php
+header('X-Source: ' . gethostname());
+header('X-Version: 1.0');
+header('Content-Type: text/html');
+header('Cache-Control: must-revalidate');
+header('Cache-Control: no-cache');
+?>
 <!DOCTYPE html>
 <html>
   <body>
-    <?php
-    header('X-Source: ' . gethostname());
-    header('X-Version: 1.0');
-    header('Content-Type: text/html');
-    header('Cache-Control: must-revalidate');
-    header('Cache-Control: no-cache');
-    ?>
 
     <center>
       <img src="https://www.chef.io/wp-content/uploads/2017/10/partner-heros-google-10.png">
     </center>
 
-    <p>Hello from <%= node['hostname'] %>, with the IP address of <%= node['hostname'] %> on a <%= node['platform'] %> virtual machine.</p>
+    <p>Hello from <%= node['hostname'] %>, with the IP address of
+      <%= node['hostname'] %> on a <%= node['platform'] %> virtual machine.</p>
 
     <h2>metadata from GCP</h2>
 
-    Here's some useful data we get from <a href="https://docs.chef.io/ohai.html">ohai</a>.
+    Here's some useful data we get from
+    <a href="https://docs.chef.io/ohai.html">ohai</a>.
 
     <ul>
-      <li>We got the startup script from: <%= node['gce']['instance']['attributes']['startup-script-url'] %></li>
+      <li>We got the startup script from:
+        <%= node['gce']['instance']['attributes']['startup-script-url'] %></li>
       <li>Our CPU arch is: <%= node['gce']['cpuPlatform'] %></li>
       <li>My hostname on GCP is: <%= node['gce']['hostname'] %></li>
       <li>Finally, my machine image: <%= node['gce']['image'] %></li>
     </ul>
 
-    <?php
-    echo "\n\n";
-    echo "It's " . date('r') . ' around here';
-    ?>
-
-    <small>Pst, my external ip from the metadata server is: <%= node['gce']['networkInterfaces']['accessConfigs']['externalIp'] %></small>
+<?php
+echo "\n\n";
+echo "It's " . date('r') . ' around here';
+?>
 
   </body>
 </html>

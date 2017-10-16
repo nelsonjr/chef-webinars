@@ -22,10 +22,7 @@ suites:
       gce:
         instance:
           attributes:
-            startup-script-url: "https://storage.googleapis.com/jj-test-kitchen/bootstrap.sh"
+            startup-script-url: "https://raw.githubusercontent.com/nelsonjr/chef-webinars/master/getting-started/client/bootstrap.sh"
         cpuPlatform: "Intel Broadwell"
-        hostname: "machine-1.c.jj-test-kitchen.internal"
-        image: "projects/ubuntu-os-cloud/global/images/ubuntu-1604-xenial-v20171011"
-        networkInterfaces:
-          accessConfigs:
-            externalIp: "35.197.121.139"
+        hostname: "machine-1.c.chef-webinar1.internal"
+        image: "projects/centos-cloud/global/images/centos-7-v20171003"
