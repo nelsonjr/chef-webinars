@@ -6,8 +6,6 @@ metadata() {
   curl -H Metadata-Flavor:Google "${metadata_ep}/instance/attributes/${attr}"
 }
 
-(
-
 cat <<EOF
 
    ________         ____   _       __     __    _                     ____
@@ -71,12 +69,11 @@ cat >"${startup_json}" <<EOF
 EOF
 
 echo '----- Converging Chef -----'
-chef-client -j /etc/chef/startup.json
+chef-client -j /etc/chef/startup.json 2>&1 \
+  | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 
 echo '----- Cleaning up -----'
 echo 'Deleting validator key'
 rm -f "${local_validator}"
 echo 'Deleting startup role'
 rm -f "${startup_json}"
-
-) | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
