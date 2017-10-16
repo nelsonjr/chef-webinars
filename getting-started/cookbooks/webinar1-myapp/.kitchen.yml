@@ -1,0 +1,28 @@
+---
+driver:
+  name: vagrant
+  network:
+    - ["forwarded_port", {guest: 80, host: 8080}]
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centos-7.2
+
+verifier:
+  name: inspec
+  format: doc
+
+suites:
+  - name: default
+    run_list:
+      - recipe[webinar1-myapp::default]
+    attributes:
+      gce:
+        instance:
+          attributes:
+            startup-script-url: "https://raw.githubusercontent.com/nelsonjr/chef-webinars/master/getting-started/client/bootstrap.sh"
+        cpuPlatform: "Intel Broadwell"
+        hostname: "machine-1.c.chef-webinar1.internal"
+        image: "projects/centos-cloud/global/images/centos-7-v20171003"
