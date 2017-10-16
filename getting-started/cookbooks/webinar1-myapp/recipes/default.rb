@@ -47,4 +47,13 @@ template "/opt/myapp/index.php" do
   owner "root"
   group "root"
   mode "0644"
+  action :create
+end
+
+cookbook_file '/opt/myapp/logo.png' do
+  source 'myapp/v1/logo.png'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  action :create
 end

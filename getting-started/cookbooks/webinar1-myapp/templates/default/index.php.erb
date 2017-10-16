@@ -7,32 +7,98 @@ header('Cache-Control: no-cache');
 ?>
 <!DOCTYPE html>
 <html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300"
+        rel="stylesheet">
+    <style>
+    BODY {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+    #banner {
+      background-color: #298ad8;
+      text-align: center;
+    }
+    #banner IMG {
+      width: 600px;
+    }
+    H1 {
+      color: white;
+      margin: 0;
+      padding-bottom: 16pt;
+    }
+    #content {
+      padding: 24pt;
+      padding-left: 32pt;
+      padding-right: 32pt;
+    }
+    ADDRESS {
+      font-size: 16pt;
+      color: white;
+      padding-bottom: 12pt;
+      margin: 0;
+    }
+    ADDRESS CODE {
+      color: white;
+      padding: 4pt;
+    }
+    CODE A:link, CODE A:visited {
+      color: white;
+    }
+    CODE {
+      display: inline-block;
+      color: green;
+      border: 1px solid green;
+      padding: 4pt;
+      margin: 4pt;
+    }
+    </style>
+  </head>
   <body>
 
-    <center>
-      <img src="https://www.chef.io/wp-content/uploads/2017/10/partner-heros-google-10.png">
-    </center>
+    <div id='banner'>
+      <img src="logo.png">
+      <h1>Getting Started: Automating Google Cloud Platform with Chef</h1>
+      <address>
+        This is a sample application created with the
+        <code><a href=
+        'https://github.com/nelsonjr/chef-webinars/tree/master/getting-started'
+        >webinar1-infra</a></code> cookbook.
+      </address>
+    </div>
 
-    <p>Hello from <%= node['hostname'] %>, with the IP address of
-      <%= node['hostname'] %> on a <%= node['platform'] %> virtual machine.</p>
+    <div id='content'>
+      <p>Hello from <code><%= node['hostname'] %></code>, with the IP address of
+        <code><%= node['cloud_v2']['public_ipv4'] %></code> on a
+        <code><%= node['platform'] %></code> virtual machine.
+      </p>
 
-    <h2>Metadata from GCP</h2>
+      <p>It's <?= date('r') ?> around here</p>
 
-    Here's some useful data we get from
-    <a href="https://docs.chef.io/ohai.html">ohai</a>:
+      <h2>Metadata from GCP</h2>
 
-    <ul>
-      <li>We got the startup script from: <%= node['gce']['instance']['attributes']['startup-script-url'] %></li>
-      <li>Our CPU arch is: <%= node['gce']['instance']['cpuPlatform'] %></li>
-      <li>My hostname on GCP is: <%= node['gce']['instance']['hostname'] %></li>
-      <li>Finally, my machine image: <%= node['gce']['instance']['image'] %></li>
-    </ul>
+      Here's some useful data we get from
+      <a href="https://docs.chef.io/ohai.html">ohai</a>:
 
-
-<?php
-echo "\n\n";
-echo "It's " . date('r') . ' around here';
-?>
-
+      <ul>
+        <li>We got the startup script from
+          <code>
+          <%= node['gce']['instance']['attributes']['startup-script-url'] %>
+          </code>
+        </li>
+        <li>
+          Our CPU arch is
+          <code><%= node['gce']['instance']['cpuPlatform'] %></code>
+        </li>
+        <li>
+          My hostname on GCP is
+          <code><%= node['gce']['instance']['hostname'] %></code>
+        </li>
+        <li>
+          Finally, my machine image
+          <code><%= node['gce']['instance']['image'] %></code>
+        </li>
+      </ul>
+    </div>
   </body>
 </html>

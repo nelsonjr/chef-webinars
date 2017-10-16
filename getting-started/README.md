@@ -84,22 +84,30 @@ cookbook:
 
     chef-client -z --runlist 'recipe[webinar1-infra::up-app-dns]'
 
-3. Access the application using the `www.<your-domain>` address in your browser
+3. Access the application using the `www.<your-domain>.com` address in your
+   browser
 
 ### Tearing down all resources
 
 To bring everything down simply do the reverse:
 
-1. Dissociate the DNS entry from the instance:
+1. Dissociate the DNS entry from the instance by applying the
+   [webinar1-infra::down-app-dns][recipe-down-app-dns] recipe:
+   ```
+   chef-client -z --runlist 'recipe[webinar1-infra::down-app-dns]'
+   ```
 
-    chef-client -z --runlist 'recipe[webinar1-infra::down-app-dns]'
-
-2. Free all Google Cloud Platform resources:
-
-    chef-client -z --runlist 'recipe[webinar1-infra::down-app-instance]'
+2. Free all Google Cloud Platform resources by applying the
+   [webinar1-infra::down-app-instance][recipe-down-app-instance]
+   recipe:
+   ```
+   chef-client -z --runlist 'recipe[webinar1-infra::down-app-instance]'
+   ```
 
 
 [cookbook-webinar1-infra]: https://supermarket.chef.io/cookbooks/webinar1-infra
 [cookbook-webinar1-myapp]: https://supermarket.chef.io/cookbooks/webinar1-myapp
 [recipe-up-app-instance]: cookbooks/webinar1-infra/recipes/up-app-instance.rb
 [recipe-up-app-dns]: cookbooks/webinar1-infra/recipes/up-app-dns.rb
+[recipe-down-app-instance]: cookbooks/webinar1-infra/recipes/down-app-instance.rb
+[recipe-down-app-dns]: cookbooks/webinar1-infra/recipes/down-app-dns.rb

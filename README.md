@@ -5,7 +5,7 @@
 
 ### Getting Started: Automating Google Cloud Platform with Chef -- 2017/10/17
 
-![Architecture][getting-started-diag]
+[![Architecture][getting-started-diag]][getting-started-source]
 
 A quick start journey that shows how simple it is to deploy an application to Google Cloud Platform using Chef.
 
