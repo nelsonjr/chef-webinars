@@ -16,6 +16,8 @@
 include_recipe 'apache2'
 include_recipe 'apache2::mod_php'
 
+ohai_hint 'gce'
+
 apache_module 'php5' do
   filename 'libphp5.so'
 end

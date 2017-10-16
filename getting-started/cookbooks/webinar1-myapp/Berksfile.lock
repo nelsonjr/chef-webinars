@@ -5,5 +5,7 @@ DEPENDENCIES
 
 GRAPH
   apache2 (5.0.1)
+  ohai (5.2.0)
   webinar1-myapp (0.1.0)
-    apache2 (>= 0.0.0)
+    apache2 (>= 5.0.0)
+    ohai (>= 0.0.0)

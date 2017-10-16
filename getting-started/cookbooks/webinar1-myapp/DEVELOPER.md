@@ -26,6 +26,17 @@ kitchen test
 ```
 - Open up http://localhost:8080 to see the site that is created.
 
+If you would like to run this on GCE, you can run it via these options.
+
+Set up the ENV variables of:
+- `GCE_PROJECT`
+- `GCE_EMAIL`
+- `GCE_USER`
+
+Then run the following command and it will converge this in GCE.
+```shell
+KITCHEN_YAML=.kitchen.google.yml chef exec /opt/chefdk/embedded/bin/kitchen converge
+```
 
 [tk]: http://kitchen.ci
 [vagrant]: https://www.vagrantup.com/

@@ -16,18 +16,18 @@ header('Cache-Control: no-cache');
     <p>Hello from <%= node['hostname'] %>, with the IP address of
       <%= node['hostname'] %> on a <%= node['platform'] %> virtual machine.</p>
 
-    <h2>metadata from GCP</h2>
+    <h2>Metadata from GCP</h2>
 
     Here's some useful data we get from
-    <a href="https://docs.chef.io/ohai.html">ohai</a>.
+    <a href="https://docs.chef.io/ohai.html">ohai</a>:
 
     <ul>
-      <li>We got the startup script from:
-        <%= node['gce']['instance']['attributes']['startup-script-url'] %></li>
-      <li>Our CPU arch is: <%= node['gce']['cpuPlatform'] %></li>
-      <li>My hostname on GCP is: <%= node['gce']['hostname'] %></li>
-      <li>Finally, my machine image: <%= node['gce']['image'] %></li>
+      <li>We got the startup script from: <%= node['gce']['instance']['attributes']['startup-script-url'] %></li>
+      <li>Our CPU arch is: <%= node['gce']['instance']['cpuPlatform'] %></li>
+      <li>My hostname on GCP is: <%= node['gce']['instance']['hostname'] %></li>
+      <li>Finally, my machine image: <%= node['gce']['instance']['image'] %></li>
     </ul>
+
 
 <?php
 echo "\n\n";

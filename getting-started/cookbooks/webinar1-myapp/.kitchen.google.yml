@@ -1,0 +1,39 @@
+---
+driver:
+  name: gce
+  project: <%= ENV['GCE_PROJECT'] %>
+  zone: us-west1-a
+  email: <%= ENV['GCE_EMAIL'] %>
+  service_account_scopes:
+    - devstorage.read_write
+    - userinfo.email
+  tags:
+    - http-server
+
+verifier:
+  name: inspec
+  format: doc
+
+provisioner:
+  name: chef_zero
+
+transport:
+  username: <%= ENV['GCE_USER'] %>
+  ssh_key:
+    - ~/.ssh/google_compute_engine
+
+platforms:
+  - name: centos-7
+    driver:
+      image_project: centos-cloud
+      image_name: centos-7-v20170124
+      metadata:
+        application: centos
+        release: a
+        version: 7
+
+suites:
+  - name: default
+    run_list:
+      - recipe[webinar1-myapp::default]
+    attributes:
