@@ -6,6 +6,8 @@ metadata() {
   curl -H Metadata-Flavor:Google "${metadata_ep}/instance/attributes/${attr}"
 }
 
+(
+
 cat <<EOF
 
    ________         ____   _       __     __    _                     ____
@@ -43,15 +45,15 @@ declare -r start_time=$(date +%s)
 logger -t bootstrapper 'Starting bootstrap'
 
 if [[ -e '/usr/bin/chef-client' ]]; then
-  echo '===== Chef already installed. Skipping installation. ====='
+  echo '----- Chef already installed. Skipping installation. -----'
 else
-  echo '===== Installing Chef client ====='
+  echo '----- Installing Chef client -----'
   curl -L https://www.opscode.com/chef/install.sh | sudo bash
 fi
 
 mkdir -p /etc/chef
 
-echo '===== Copying validator key ====='
+echo '----- Copying validator key -----'
 gsutil cp "${validator}" "${local_validator}"
 
 cat >/etc/chef/client.rb <<EOF
@@ -59,20 +61,22 @@ chef_server_url '${chef_server_url}'
 validation_client_name '${org_name}-validator'
 EOF
 
-echo '===== Setting up security ====='
+echo '----- Setting up security -----'
 mkdir -p /etc/chef/trusted_certs
 gsutil cp "${chef_server_crt}" "/etc/chef/trusted_certs/server.crt"
 
-echo '===== Setting first run ====='
+echo '----- Setting first run -----'
 cat >"${startup_json}" <<EOF
 {"run_list": "${start_run_list}"}
 EOF
 
-echo '===== Converging Chef ====='
+echo '----- Converging Chef -----'
 chef-client -j /etc/chef/startup.json
 
-echo '===== Cleaning up ====='
+echo '----- Cleaning up -----'
 echo 'Deleting validator key'
 rm -f "${local_validator}"
 echo 'Deleting startup role'
 rm -f "${startup_json}"
+
+) | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
