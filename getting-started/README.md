@@ -77,12 +77,14 @@ cookbook:
 ### Converging the recipes
 
 1. Bring the infrastructue up:
-
+    ```
     chef-client -z --runlist 'recipe[webinar1-infra::up-app-instance]'
+    ```
 
 2. Associate the DNS with the infrastructure:
-
+    ```
     chef-client -z --runlist 'recipe[webinar1-infra::up-app-dns]'
+    ```
 
 3. Access the application using the `www.<your-domain>.com` address in your
    browser
