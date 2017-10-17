@@ -40,17 +40,29 @@ header('Cache-Control: no-cache');
     }
     ADDRESS CODE {
       color: white;
+      font-size: inherit;
       padding: 4pt;
       border: 0;
+      margin: 0;
     }
     CODE A:link, CODE A:visited {
       color: white;
     }
     CODE {
+      font-size: 14pt;
       display: inline-block;
       color: green;
-      border: 1px solid green;
-      padding: 4pt;
+      margin-top: 4pt;
+      margin-bottom: 4pt;
+    }
+    .time {
+      color: magenta;
+    }
+    .cook-sel {
+      color: red;
+    }
+    .cook-nosel {
+      color: brown;
     }
     </style>
   </head>
@@ -75,29 +87,54 @@ header('Cache-Control: no-cache');
 
       <p>It's <?= date('r') ?> around here</p>
 
-      <h2>Metadata from GCP</h2>
+      <h2>Metadata from Google Cloud Platform</h2>
 
       Here's some useful data we get from
-      <a href="https://docs.chef.io/ohai.html">ohai</a>:
+      <a href="https://docs.chef.io/ohai.html">Ohai</a>:
 
       <ul>
-        <li>We got the startup script from
+        <li>We got the startup script from:
           <code>
           <%= node['gce']['instance']['attributes']['startup-script-url'] %>
           </code>
         </li>
         <li>
-          Our CPU arch is
+          Our CPU arch is:
           <code><%= node['gce']['instance']['cpuPlatform'] %></code>
         </li>
         <li>
-          My hostname on GCP is
+          My hostname on GCP is:
           <code><%= node['gce']['instance']['hostname'] %></code>
         </li>
         <li>
-          Finally, my machine image
+          Finally, my machine image:
           <code><%= node['gce']['instance']['image'] %></code>
         </li>
+      </ul>
+
+      <h2>Cookbooks</h2>
+
+      <p>The following cookbooks were applied to this machine:</p>
+
+      <ul>
+<% run_list = node['expanded_run_list'] -%>
+<%
+  node['cookbooks'].select { |k, _v| run_list.any? { |r| r.include?(k) } }
+                   .each do |name, data|
+-%>
+        <li><code><%= name -%>: <%= data['version'] -%></code></li>
+<% end -%>
+      </ul>
+
+      <p>The following cookbooks were also applied:</p>
+
+      <ul>
+<%
+  node['cookbooks'].reject { |k, _v| run_list.any? { |r| r.include?(k) } }
+                   .each do |name, data|
+-%>
+        <li><code><%= name -%>: <%= data['version'] -%></code></li>
+<% end -%>
       </ul>
     </div>
   </body>
