@@ -27,6 +27,8 @@ To install the cookbooks run:
 
     knife supermaket install webinar1-infra
 
+> For convenience the `webinar1-infra` cookbook has dependency on `google-gcompute`
+> cookbook so it downloads automatically.
 
 ## Workflow
 
